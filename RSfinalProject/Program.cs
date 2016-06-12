@@ -11,6 +11,8 @@ namespace RSfinalProject
 
         static void Main(string[] args)
         {
+            RecSys recSys = new RecSys();
+            recSys.Load("data.seq", 0.95);
         }
     }
 }

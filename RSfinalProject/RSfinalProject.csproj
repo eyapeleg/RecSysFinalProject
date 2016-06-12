@@ -44,14 +44,18 @@
     <Compile Include="Engines\DataLoaderEngine.cs" />
     <Compile Include="Common\DataUtils.cs" />
     <Compile Include="Model\DatasetType.cs" />
-    <Compile Include="Model\Item.cs" />
+    <Compile Include="ToDelete\Item.cs" />
     <Compile Include="Engines\ItemBasedEngine.cs" />
-    <Compile Include="Model\Items.cs" />
+    <Compile Include="ToDelete\Items.cs" />
+    <Compile Include="Model\Pair.cs" />
+    <Compile Include="Model\Pairs.cs" />
+    <Compile Include="ToDelete\Seq.cs" />
+    <Compile Include="ToDelete\Seqs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Common\RandomGenerator.cs" />
-    <Compile Include="Model\User.cs" />
-    <Compile Include="Model\Users.cs" />
+    <Compile Include="ToDelete\User.cs" />
+    <Compile Include="ToDelete\Users.cs" />
     <Compile Include="RecSys.cs" />
   </ItemGroup>
   <ItemGroup>
