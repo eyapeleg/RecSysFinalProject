@@ -1,0 +1,6 @@
+C:\Users\eyapeleg\Desktop\RSfinalProject\RSfinalProject\bin\Debug\RSfinalProject.exe.config
+C:\Users\eyapeleg\Desktop\RSfinalProject\RSfinalProject\bin\Debug\RSfinalProject.exe
+C:\Users\eyapeleg\Desktop\RSfinalProject\RSfinalProject\bin\Debug\RSfinalProject.pdb
+C:\Users\eyapeleg\Desktop\RSfinalProject\RSfinalProject\obj\Debug\RSfinalProject.csprojResolveAssemblyReference.cache
+C:\Users\eyapeleg\Desktop\RSfinalProject\RSfinalProject\obj\Debug\RSfinalProject.exe
+C:\Users\eyapeleg\Desktop\RSfinalProject\RSfinalProject\obj\Debug\RSfinalProject.pdb
