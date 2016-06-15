@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace RSfinalProject
 {
-    public class Pair 
+    public class ItemPair 
     {
         private Tuple<string, string> pair;
 
-        public Pair(string item1, string item2)
+        public ItemPair(string item1, string item2)
         {
             this.pair = Tuple.Create(item1, item2);
         }
@@ -23,7 +23,7 @@ namespace RSfinalProject
             if (obj == this)
                 return true;
 
-            if (this.pair.Equals(((Pair)obj).pair))
+            if (this.pair.Equals(((ItemPair)obj).pair))
                 return true;
 
             return false;

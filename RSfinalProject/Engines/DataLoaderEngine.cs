@@ -11,16 +11,17 @@ namespace RSfinalProject
     public class DataLoaderEngine
     {
         private int datasetSize;
-        DataUtils dataUtils = new DataUtils();
 
         public DataLoaderEngine()
         {
         }
 
-        public Tuple<Pairs,Pairs> Load(string sFileName)
+        public Items Load(string sFileName)
         {
-            Pairs seqPairs = new Pairs();
-            Pairs allPairs = new Pairs();
+            ItemPairs seqPairs = new ItemPairs();
+            ItemPairs allPairs = new ItemPairs();
+            ItemCounts seqCounts = new ItemCounts();
+            ItemCounts allCounts = new ItemCounts();
 
             Stopwatch timer = Stopwatch.StartNew();
             StreamReader objInput = new StreamReader(sFileName, Encoding.Default);
@@ -28,7 +29,9 @@ namespace RSfinalProject
             {
                 string[] seq = readNextSequence(objInput);
                 populateSeqPairs(seqPairs, seq);
-                populateAllPairs(allPairs, seq);    
+                populateAllPairs(allPairs, seq);
+                populateSeqCounts(seqCounts, seq);
+                populateAllCounts(allCounts, seq);
             }
 
             timer.Stop();
@@ -43,7 +46,7 @@ namespace RSfinalProject
             //datasetSize = (int)users.Sum(user => user.GetRatedItems().Count());
             //Console.WriteLine("dataset size after removing blacklisted users: {0}", datasetSize);
 
-            return new Tuple<Pairs,Pairs>(allPairs,seqPairs);
+            return new Items(allPairs,seqPairs,seqCounts,allCounts);
         }
 
         private static string[] readNextSequence(StreamReader objInput)
@@ -54,24 +57,42 @@ namespace RSfinalProject
             return split.Where(item => item != "").ToArray();
         }
 
-        private static void populateAllPairs(Pairs allPairs, string[] split)
+        private static void populateAllPairs(ItemPairs allPairs, string[] seq)
         {
-            for (int i = 0; i < split.Count() - 1; i++)
+            string[] distinctSeq = seq.Distinct().ToArray();
+            for (int i = 0; i < distinctSeq.Count() - 1; i++)
             {
-                for (int j = i + 1; j < split.Count(); j++)
+                for (int j = i + 1; j < distinctSeq.Count(); j++)
                 {
-                    Pair pair = split[i].CompareTo(split[j]) < 0 ? new Pair(split[i], split[j]) : new Pair(split[j], split[i]);
+                    ItemPair pair = seq[i].CompareTo(seq[j]) < 0 ? new ItemPair(seq[i], seq[j]) : new ItemPair(seq[j], seq[i]);
                     allPairs.addPair(pair);
                 }
             }
         }
 
-        private static void populateSeqPairs(Pairs seqPairs, string[] split)
+        private static void populateSeqPairs(ItemPairs seqPairs, string[] seq)
         {
-            for (int i = 0; i < split.Count() - 1; i++)
+            for (int i = 0; i < seq.Count() - 1; i++)
             {
-                Pair pair = new Pair(split[i], split[i + 1]);
+                ItemPair pair = new ItemPair(seq[i], seq[i + 1]);
                 seqPairs.addPair(pair);
+            }
+        }
+
+        private void populateAllCounts(ItemCounts counts, string[] seq)
+        {
+            string[] distinctSeq = seq.Distinct().ToArray();
+            for (int i = 0; i < distinctSeq.Count(); i++)
+            {
+                counts.addItem(seq[i]);
+            }
+        }
+
+        private void populateSeqCounts(ItemCounts counts, string[] seq)
+        {
+            for (int i = 0; i < seq.Count()-1; i++)
+            {
+                counts.addItem(seq[i]);
             }
         }
 

@@ -10,30 +10,18 @@ namespace RSfinalProject
     {
 
         private DataLoaderEngine dataLoaderEngine;
-        private ItemBasedEngine itemBasedEngine;
-        private DataUtils dataUtils;
-
-        private Users users;
-        private Items items;
-        private Users trainUsers;
-        private Items trainItems;
-        private Users validationUsers;
-        private Items validationItems;
-        private Users testUsers;
-        private Items testItems;
-
-        private int dsSize;
 
         public RecSys() {
             dataLoaderEngine = new DataLoaderEngine();
-            dataUtils = new DataUtils();
         }
 
         public void Load(string sFileName, double dTrainSetSize)
         {
-            Tuple<Pairs, Pairs> data = dataLoaderEngine.Load(sFileName);
-
-            this.dsSize = dataLoaderEngine.GetDataSetSize();
+            Items data = dataLoaderEngine.Load(sFileName);
+            Console.WriteLine("Cp: {0}", data.getCp("1", "1"));
+            Console.WriteLine("Cp: {0}", data.getSeq("1", "1"));
+    
+            
             //splittedData = dataUtils.Split(dTrainSetSize, dsSize, data, DatasetType.Test, DatasetType.Train);
             //
             //trainUsers = splittedData[DatasetType.Train].Item1;
