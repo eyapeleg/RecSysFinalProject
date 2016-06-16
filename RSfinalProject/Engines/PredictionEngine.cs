@@ -7,19 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Collections.Concurrent;
+using RSfinalProject.Engines;
 
 namespace RSfinalProject
 {
     public class PredictionEngine
     {
-        private Items items;
+        private Items items = new Items();
+        private List<string[]> trainSet;
         private int MIN_NUMBER_OF_USERS = 25;
         private double PROBABILITY_THRESHOLD = 0.30;
         private int MAX_NUM_RESULTS = 50;
 
-        public PredictionEngine(Items items)
+        public PredictionEngine(List<string[]> trainSet)
         {
-            this.items = items;
+            this.trainSet = trainSet;
         }
 
         public List<KeyValuePair<string, double>> getConditionalProbability(List<string> givenItems)
@@ -27,7 +29,7 @@ namespace RSfinalProject
             return getProbabilities(givenItems, cp);
         }
 
-        public List<KeyValuePair<string, double>> getJaccardProbability(List<string> givenItems)
+        public List<KeyValuePair<string, double>> getSequenceProbability(List<string> givenItems)
         {
             return getProbabilities(givenItems, seq);
         }
@@ -86,6 +88,99 @@ namespace RSfinalProject
             double seqCount = items.getSeqPairsCount(pair);
             double givenItemCount = items.getSeqCount(givenItem);
             return (seqCount / givenItemCount);
+        }
+
+        public void TrainCpModel()
+        {
+            ItemPairsCount allPairs = new ItemPairsCount();
+            ItemsCounts allCounts = new ItemsCounts();
+
+            if (trainSet == null)
+            {
+                throw new NullReferenceException("train set must be initialize first");
+            }
+
+            foreach (var session in trainSet)
+            {
+                populateAllPairs(allPairs, session);
+                populateAllCounts(allCounts, session);
+            }
+
+            items.addAllPairs(allPairs);
+            items.addAllCount(allCounts);
+        }
+
+        public void TrainSeqModel()
+        {
+            ItemPairsCount seqPairs = new ItemPairsCount();
+            ItemsCounts seqCounts = new ItemsCounts();
+
+            if (trainSet == null)
+            {
+                throw new NullReferenceException("train set must be initialize first");
+            }
+
+            foreach (var session in trainSet)
+            {
+                populateSeqPairs(seqPairs, session);
+                populateSeqCounts(seqCounts, session);
+            }
+
+            items.addSeqPairs(seqPairs);
+            items.addSeqCounts(seqCounts);
+        }
+
+        #region private 
+        private void populateAllPairs(ItemPairsCount allPairs, string[] seq)
+        {
+            string[] distinctSeq = seq.Distinct().ToArray();
+            for (int i = 0; i < distinctSeq.Count() - 1; i++)
+            {
+                for (int j = i + 1; j < distinctSeq.Count(); j++)
+                {
+                    ItemPair pair = seq[i].CompareTo(seq[j]) < 0 ? new ItemPair(seq[i], seq[j]) : new ItemPair(seq[j], seq[i]);
+                    allPairs.addPair(pair);
+                }
+            }
+        }
+
+        private void populateAllCounts(ItemsCounts counts, string[] seq)
+        {
+            string[] distinctSeq = seq.Distinct().ToArray();
+            for (int i = 0; i < distinctSeq.Count(); i++)
+            {
+                counts.addItem(seq[i]);
+            }
+        }
+
+        private void populateSeqPairs(ItemPairsCount seqPairs, string[] seq)
+        {
+            for (int i = 0; i < seq.Count() - 1; i++)
+            {
+                ItemPair pair = new ItemPair(seq[i], seq[i + 1]);
+                seqPairs.addPair(pair);
+            }
+        }
+
+
+
+        private void populateSeqCounts(ItemsCounts counts, string[] seq)
+        {
+            for (int i = 0; i < seq.Count() - 1; i++)
+            {
+                counts.addItem(seq[i]);
+            }
+        }
+        #endregion
+
+        public List<KeyValuePair<string, double>> getProbability(List<string> givenItems, EvaluationEngine.Method method)
+        {
+            if (method == EvaluationEngine.Method.Cp)
+            {
+                return getConditionalProbability(givenItems);
+            }
+
+            return getSequenceProbability(new List<string> { givenItems.Last() });
         }
     }
 }

@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engines\DataLoaderEngine.cs" />
+    <Compile Include="Engines\EvaluationEngine.cs" />
     <Compile Include="Engines\PredictionEngine.cs" />
     <Compile Include="Model\ItemsCounts.cs" />
     <Compile Include="Model\DatasetType.cs" />

@@ -12,7 +12,11 @@ namespace RSfinalProject
         static void Main(string[] args)
         {
             RecSys recSys = new RecSys();
-            recSys.Load("data.seq", 0.95);
+            recSys.Load("data.csv", 0.99);
+            recSys.TrainCpModel();
+            recSys.TrainSeqModel();
+            recSys.ComputeHitRatio();
+            Console.ReadLine();
         }
     }
 }

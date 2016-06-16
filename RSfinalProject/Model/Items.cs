@@ -13,14 +13,6 @@ namespace RSfinalProject
         private ItemsCounts allCounts;
         private ItemsCounts seqCounts;
 
-        public Items(ItemPairsCount allPairs, ItemPairsCount seqPairs, ItemsCounts seqCounts, ItemsCounts allCounts)
-        {
-            this.allPairs = allPairs;
-            this.seqPairs = seqPairs;
-            this.allCounts = allCounts;
-            this.seqCounts = seqCounts;
-        }
-
         public int getAllPairsCount(ItemPair itemPair)
         {
             return allPairs.getPairCount(itemPair);
@@ -44,6 +36,26 @@ namespace RSfinalProject
         public List<string> getItemsList()
         {
             return allCounts.getItemsList();
+        }
+
+        public void addAllPairs(ItemPairsCount allPairs)
+        {
+            this.allPairs = allPairs;
+        }
+
+        public void addAllCount(ItemsCounts allCounts)
+        {
+            this.allCounts = allCounts;
+        }
+
+        public void addSeqPairs(ItemPairsCount seqPairs)
+        {
+            this.seqPairs = seqPairs;
+        }
+
+        public void addSeqCounts(ItemsCounts seqCounts)
+        {
+            this.seqCounts = seqCounts;
         }
     }
 }

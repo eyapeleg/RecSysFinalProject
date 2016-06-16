@@ -16,84 +16,41 @@ namespace RSfinalProject
         {
         }
 
-        public Items Load(string sFileName)
+        public Dictionary<DatasetType, List<string[]>> Load(string sFileName, double dTrainSetSize)
         {
-            ItemPairsCount seqPairs = new ItemPairsCount();
-            ItemPairsCount allPairs = new ItemPairsCount();
-            ItemsCounts seqCounts = new ItemsCounts();
-            ItemsCounts allCounts = new ItemsCounts();
+            Dictionary<DatasetType, List<string[]>> dataset = new Dictionary<DatasetType, List<string[]>>();
+            dataset.Add(DatasetType.Test, new List<string[]>());
+            dataset.Add(DatasetType.Train, new List<string[]>());
 
-            Stopwatch timer = Stopwatch.StartNew();
+            Random rnd = new Random();
             StreamReader objInput = new StreamReader(sFileName, Encoding.Default);
+            Stopwatch timer = Stopwatch.StartNew();
             while (!objInput.EndOfStream)
             {
                 string[] seq = readNextSequence(objInput);
-                populateSeqPairs(seqPairs, seq);
-                populateAllPairs(allPairs, seq);
-                populateSeqCounts(seqCounts, seq);
-                populateAllCounts(allCounts, seq);
+                if (rnd.NextDouble() <= dTrainSetSize)
+                {
+                    dataset[DatasetType.Train].Add(seq);
+                }
+                else
+                {
+                    dataset[DatasetType.Test].Add(seq);
+                }
             }
 
             timer.Stop();
             TimeSpan elapsed = timer.Elapsed;
-            System.Console.WriteLine("Loading data was completed successfully\nExection Time: " + elapsed.ToString("mm':'ss':'fff"));
+            Console.WriteLine("Loading data was completed successfully\nExection Time: " + elapsed.ToString("mm':'ss':'fff"));
 
-            //var blacklistedUsers = users.Where(user => user.GetRatedItems().Count < 5).Select(user => user.GetId()).ToList();
-            //Console.WriteLine("blacklisted users size: {0}", blacklistedUsers.Count());
-            //Console.WriteLine("dataset size before removing blacklisted users: {0}", users.Sum(user => user.GetRatedItems().Count()));
-            //users.removeUsers(blacklistedUsers);
-
-            //datasetSize = (int)users.Sum(user => user.GetRatedItems().Count());
-            //Console.WriteLine("dataset size after removing blacklisted users: {0}", datasetSize);
-
-            return new Items(allPairs,seqPairs,seqCounts,allCounts);
+            return dataset;
         }
 
         private static string[] readNextSequence(StreamReader objInput)
         {
-            string delimiter = " ";
+            string delimiter = ";";
             string line = objInput.ReadLine();
             string[] split = System.Text.RegularExpressions.Regex.Split(line,delimiter, RegexOptions.None);
             return split.Where(item => item != "").ToArray();
-        }
-
-        private static void populateAllPairs(ItemPairsCount allPairs, string[] seq)
-        {
-            string[] distinctSeq = seq.Distinct().ToArray();
-            for (int i = 0; i < distinctSeq.Count() - 1; i++)
-            {
-                for (int j = i + 1; j < distinctSeq.Count(); j++)
-                {
-                    ItemPair pair = seq[i].CompareTo(seq[j]) < 0 ? new ItemPair(seq[i], seq[j]) : new ItemPair(seq[j], seq[i]);
-                    allPairs.addPair(pair);
-                }
-            }
-        }
-
-        private static void populateSeqPairs(ItemPairsCount seqPairs, string[] seq)
-        {
-            for (int i = 0; i < seq.Count() - 1; i++)
-            {
-                ItemPair pair = new ItemPair(seq[i], seq[i + 1]);
-                seqPairs.addPair(pair);
-            }
-        }
-
-        private void populateAllCounts(ItemsCounts counts, string[] seq)
-        {
-            string[] distinctSeq = seq.Distinct().ToArray();
-            for (int i = 0; i < distinctSeq.Count(); i++)
-            {
-                counts.addItem(seq[i]);
-            }
-        }
-
-        private void populateSeqCounts(ItemsCounts counts, string[] seq)
-        {
-            for (int i = 0; i < seq.Count()-1; i++)
-            {
-                counts.addItem(seq[i]);
-            }
         }
 
         public int GetDataSetSize()
