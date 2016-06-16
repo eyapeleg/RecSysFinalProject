@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace RSfinalProject
 {
-    public class ItemPairs
+    public class ItemPairsCount
     {
         private Dictionary<ItemPair, int> pairs;
 
-        public ItemPairs()
+        public ItemPairsCount()
         {
             pairs = new Dictionary<ItemPair, int>();
         }

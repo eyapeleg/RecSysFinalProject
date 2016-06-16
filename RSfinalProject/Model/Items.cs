@@ -8,12 +8,12 @@ namespace RSfinalProject
 {
     public class Items
     {
-        private ItemPairs allPairs;
-        private ItemPairs seqPairs;
-        private ItemCounts allCounts;
-        private ItemCounts seqCounts;
+        private ItemPairsCount allPairs;
+        private ItemPairsCount seqPairs;
+        private ItemsCounts allCounts;
+        private ItemsCounts seqCounts;
 
-        public Items(ItemPairs allPairs, ItemPairs seqPairs, ItemCounts seqCounts, ItemCounts allCounts)
+        public Items(ItemPairsCount allPairs, ItemPairsCount seqPairs, ItemsCounts seqCounts, ItemsCounts allCounts)
         {
             this.allPairs = allPairs;
             this.seqPairs = seqPairs;
@@ -21,21 +21,29 @@ namespace RSfinalProject
             this.seqCounts = seqCounts;
         }
 
-        public double getCp(string expectedItem, string givenItem)
+        public int getAllPairsCount(ItemPair itemPair)
         {
-            ItemPair pair = givenItem.CompareTo(expectedItem) < 0 ? new ItemPair(givenItem, expectedItem) : new ItemPair(expectedItem, givenItem);
-            double pairCount = allPairs.getPairCount(pair);
-            double givenItemCount = allCounts.getItemCount(givenItem);
-            return (pairCount / givenItemCount) ;
+            return allPairs.getPairCount(itemPair);
         }
 
-        public double getSeq(string expectedItem, string givenItem)
+        public int getSeqPairsCount(ItemPair itemPair)
         {
-            ItemPair pair = new ItemPair(givenItem, expectedItem);
-            double seqCount = seqPairs.getPairCount(pair);
-            double givenItemCount = seqCounts.getItemCount(givenItem);
-            return (seqCount / givenItemCount);
+            return seqPairs.getPairCount(itemPair);
         }
 
+        public int getAllCount(string item)
+        {
+            return allCounts.getItemCount(item);
+        }
+
+        public int getSeqCount(string item)
+        {
+            return seqCounts.getItemCount(item);
+        }
+
+        public List<string> getItemsList()
+        {
+            return allCounts.getItemsList();
+        }
     }
 }

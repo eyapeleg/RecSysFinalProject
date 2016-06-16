@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace RSfinalProject
 {
-    public class ItemCounts
+    public class ItemsCounts
     {
         Dictionary<string, int> counts;
 
-        public ItemCounts()
+        public ItemsCounts()
         {
             this.counts = new Dictionary<string, int>();
         }
@@ -30,6 +30,11 @@ namespace RSfinalProject
                 return counts[item];
             else
                 return 0;
+        }
+
+        public List<string> getItemsList()
+        {
+            return this.counts.Keys.ToList();
         }
     }
 }

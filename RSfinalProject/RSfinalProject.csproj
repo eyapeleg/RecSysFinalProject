@@ -43,11 +43,11 @@
   <ItemGroup>
     <Compile Include="Engines\DataLoaderEngine.cs" />
     <Compile Include="Engines\PredictionEngine.cs" />
-    <Compile Include="Model\ItemCounts.cs" />
-    <Compile Include="Engines\DatasetType.cs" />
+    <Compile Include="Model\ItemsCounts.cs" />
+    <Compile Include="Model\DatasetType.cs" />
     <Compile Include="Model\Items.cs" />
     <Compile Include="Model\ItemPair.cs" />
-    <Compile Include="Model\ItemPairs.cs" />
+    <Compile Include="Model\ItemPairsCount.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecSys.cs" />

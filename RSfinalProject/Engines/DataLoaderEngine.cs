@@ -18,10 +18,10 @@ namespace RSfinalProject
 
         public Items Load(string sFileName)
         {
-            ItemPairs seqPairs = new ItemPairs();
-            ItemPairs allPairs = new ItemPairs();
-            ItemCounts seqCounts = new ItemCounts();
-            ItemCounts allCounts = new ItemCounts();
+            ItemPairsCount seqPairs = new ItemPairsCount();
+            ItemPairsCount allPairs = new ItemPairsCount();
+            ItemsCounts seqCounts = new ItemsCounts();
+            ItemsCounts allCounts = new ItemsCounts();
 
             Stopwatch timer = Stopwatch.StartNew();
             StreamReader objInput = new StreamReader(sFileName, Encoding.Default);
@@ -57,7 +57,7 @@ namespace RSfinalProject
             return split.Where(item => item != "").ToArray();
         }
 
-        private static void populateAllPairs(ItemPairs allPairs, string[] seq)
+        private static void populateAllPairs(ItemPairsCount allPairs, string[] seq)
         {
             string[] distinctSeq = seq.Distinct().ToArray();
             for (int i = 0; i < distinctSeq.Count() - 1; i++)
@@ -70,7 +70,7 @@ namespace RSfinalProject
             }
         }
 
-        private static void populateSeqPairs(ItemPairs seqPairs, string[] seq)
+        private static void populateSeqPairs(ItemPairsCount seqPairs, string[] seq)
         {
             for (int i = 0; i < seq.Count() - 1; i++)
             {
@@ -79,7 +79,7 @@ namespace RSfinalProject
             }
         }
 
-        private void populateAllCounts(ItemCounts counts, string[] seq)
+        private void populateAllCounts(ItemsCounts counts, string[] seq)
         {
             string[] distinctSeq = seq.Distinct().ToArray();
             for (int i = 0; i < distinctSeq.Count(); i++)
@@ -88,7 +88,7 @@ namespace RSfinalProject
             }
         }
 
-        private void populateSeqCounts(ItemCounts counts, string[] seq)
+        private void populateSeqCounts(ItemsCounts counts, string[] seq)
         {
             for (int i = 0; i < seq.Count()-1; i++)
             {
