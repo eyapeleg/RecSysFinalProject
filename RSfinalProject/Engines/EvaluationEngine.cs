@@ -66,7 +66,7 @@ namespace RSfinalProject.Engines
                 count++;
             }
 
-            
+            Console.WriteLine("\nHit Ratio Results:");
             foreach (var len in ans.Keys)
             {
                 foreach (var method in ans[len].Keys)
