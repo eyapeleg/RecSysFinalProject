@@ -14,6 +14,7 @@ namespace RSfinalProject
         private DataLoaderEngine dataLoaderEngine;
         private PredictionEngine predictionEngine;
         private EvaluationEngine evaluationEngine;
+        private List<string[]> data;
         private List<string[]> trainSet;
         private List<string[]> testSet;
 
@@ -21,15 +22,13 @@ namespace RSfinalProject
             dataLoaderEngine = new DataLoaderEngine();
         }
 
-        public void Load(string sFileName, double dTrainSetSize)
+        public List<string[]> Load(string sFileName, double dTrainSetSize)
         {
-            Dictionary<DatasetType, List<string[]>> data = dataLoaderEngine.Load(sFileName, dTrainSetSize);
-            trainSet = data[DatasetType.Train];
-            testSet = data[DatasetType.Test];
-
+            return dataLoaderEngine.Load(sFileName);
             this.predictionEngine = new PredictionEngine(trainSet);
             this.evaluationEngine = new EvaluationEngine(testSet, predictionEngine);
         }
+
 
         public void TrainCpModel()
         {

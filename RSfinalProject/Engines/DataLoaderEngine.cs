@@ -16,26 +16,16 @@ namespace RSfinalProject
         {
         }
 
-        public Dictionary<DatasetType, List<string[]>> Load(string sFileName, double dTrainSetSize)
+        public List<string[]> Load(string sFileName)
         {
-            Dictionary<DatasetType, List<string[]>> dataset = new Dictionary<DatasetType, List<string[]>>();
-            dataset.Add(DatasetType.Test, new List<string[]>());
-            dataset.Add(DatasetType.Train, new List<string[]>());
-
-            Random rnd = new Random();
+            List<string[]> dataset = new List<string[]>();
+           
             StreamReader objInput = new StreamReader(sFileName, Encoding.Default);
             Stopwatch timer = Stopwatch.StartNew();
             while (!objInput.EndOfStream)
             {
                 string[] seq = readNextSequence(objInput);
-                if (rnd.NextDouble() <= dTrainSetSize)
-                {
-                    dataset[DatasetType.Train].Add(seq);
-                }
-                else
-                {
-                    dataset[DatasetType.Test].Add(seq);
-                }
+                dataset.Add(seq);
             }
 
             timer.Stop();
