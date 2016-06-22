@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RSfinalProject.Engines;
 
 namespace RSfinalProject
 {
@@ -14,22 +13,23 @@ namespace RSfinalProject
         private DataLoaderEngine dataLoaderEngine;
         private PredictionEngine predictionEngine;
         private EvaluationEngine evaluationEngine;
-        private List<string[]> trainSet;
-        private List<string[]> testSet;
+        private DataUtils dataPreparationEngine;
+
+        //private List<string[]> trainSet;
+        //private List<string[]> testSet;
+        //private List<string[]> data;
 
         public RecSys() {
-            dataLoaderEngine = new DataLoaderEngine();
+            
+            dataPreparationEngine = new DataUtils();
         }
 
-        public void Load(string sFileName, double dTrainSetSize)
+        public List<string[]> Load(string sFileName)
         {
-            Dictionary<DatasetType, List<string[]>> data = dataLoaderEngine.Load(sFileName, dTrainSetSize);
-            trainSet = data[DatasetType.Train];
-            testSet = data[DatasetType.Test];
-
-            this.predictionEngine = new PredictionEngine(trainSet);
-            this.evaluationEngine = new EvaluationEngine(testSet, predictionEngine);
+            DataLoaderEngine dataLoaderEngine = new DataLoaderEngine();
+            return dataLoaderEngine.Load(sFileName);
         }
+
 
         public void TrainCpModel()
         {
@@ -53,15 +53,33 @@ namespace RSfinalProject
             Console.WriteLine("Train Seq Model was completed successfully\nExection Time: " + elapsed.ToString("mm':'ss':'fff"));
         }
 
-        public void ComputeHitRatio()
+        public void ComputeHitRatio(int iterationNum, int cvNum)
         {
             Stopwatch timer = Stopwatch.StartNew();
 
-            evaluationEngine.ComputeHitRatio();
+            evaluationEngine.ComputeHitRatio(iterationNum, cvNum);
 
             timer.Stop();
             TimeSpan elapsed = timer.Elapsed;
             Console.WriteLine("Compute Hit Ratio was completed successfully\nExection Time: " + elapsed.ToString("mm':'ss':'fff"));
+        }
+
+        public void runExperiment(string fileName, int numOfIterations, int numCrossValidation)
+        {
+            List<string[]> data = this.Load(fileName);
+            for(int i=0; i< numOfIterations;i++)
+            {
+                List<string[]> allData = dataPreparationEngine.randomizeData(data);
+                for (int j = 0; j < numCrossValidation; j++)
+                {
+                    Dictionary<DatasetType, List<string[]>> trainTestData = dataPreparationEngine.devideDataToTrainTestCV(allData,j,numCrossValidation);
+                    predictionEngine = new PredictionEngine(trainTestData[DatasetType.Train]);
+                    evaluationEngine = new EvaluationEngine(trainTestData[DatasetType.Test], predictionEngine);
+                    TrainCpModel();
+                    TrainSeqModel();
+                    ComputeHitRatio(i , j);
+                }
+            }
         }
     }
 }

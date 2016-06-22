@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace RSfinalProject
 {
-    class Program
+    public class IOUtils
     {
-
-        static void Main(string[] args)
+        public void writeToCsv()
         {
-            RecSys recSys = new RecSys();
-            recSys.runExperiment("data.csv", 100,10);
+            StringBuilder stringBuilder = new StringBuilder();
+
+
         }
     }
 }

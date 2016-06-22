@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engines\DataLoaderEngine.cs" />
+    <Compile Include="Model\EvaluationResult.cs" />
+    <Compile Include="Model\PredictionMethod.cs" />
+    <Compile Include="Utils\DataUtils.cs" />
     <Compile Include="Engines\EvaluationEngine.cs" />
     <Compile Include="Engines\PredictionEngine.cs" />
     <Compile Include="Model\ItemsCounts.cs" />
@@ -52,6 +55,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecSys.cs" />
+    <Compile Include="Utils\IOUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
