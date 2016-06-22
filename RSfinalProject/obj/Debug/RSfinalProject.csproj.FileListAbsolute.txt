@@ -4,3 +4,6 @@ C:\Users\eyapeleg\Desktop\RSfinalProject\RSfinalProject\bin\Debug\RSfinalProject
 C:\Users\eyapeleg\Desktop\RSfinalProject\RSfinalProject\obj\Debug\RSfinalProject.csprojResolveAssemblyReference.cache
 C:\Users\eyapeleg\Desktop\RSfinalProject\RSfinalProject\obj\Debug\RSfinalProject.exe
 C:\Users\eyapeleg\Desktop\RSfinalProject\RSfinalProject\obj\Debug\RSfinalProject.pdb
+C:\Users\t-ybrum\Source\Repos\RecSysFinalProject\RSfinalProject\bin\Debug\RSfinalProject.exe.config
+C:\Users\t-ybrum\Source\Repos\RecSysFinalProject\RSfinalProject\obj\Debug\RSfinalProject.exe
+C:\Users\t-ybrum\Source\Repos\RecSysFinalProject\RSfinalProject\obj\Debug\RSfinalProject.pdb
