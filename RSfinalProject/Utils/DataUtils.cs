@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace RSfinalProject
 {
-    public class DataPreparationEngine
+    public class DataUtils
     {
         public Dictionary<DatasetType, List<string[]>> devideDataToTrainTestRandomly(List<string[]> data, double dTrainSetSize)
         {

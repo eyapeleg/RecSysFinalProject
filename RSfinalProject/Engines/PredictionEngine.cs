@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Collections.Concurrent;
-using RSfinalProject.Engines;
 
 namespace RSfinalProject
 {
@@ -15,9 +14,9 @@ namespace RSfinalProject
     {
         private Items items = new Items();
         private List<string[]> trainSet;
-        private int MIN_NUMBER_OF_USERS = 25;
+        private int MIN_NUM_APPEARENCES = 15;
         private double PROBABILITY_THRESHOLD = 0.30;
-        private int MAX_NUM_RESULTS = 50;
+        private int MAX_NUM_RESULTS = 10;
 
         public PredictionEngine(List<string[]> trainSet)
         {
@@ -71,7 +70,7 @@ namespace RSfinalProject
 
         private bool itemValid(List<string> givenItems, string item)
         {
-            return items.getAllCount(item) > MIN_NUMBER_OF_USERS && !givenItems.Contains(item);
+            return items.getAllCount(item) > MIN_NUM_APPEARENCES && !givenItems.Contains(item);
         }
 
         private double cp(string expectedItem, string givenItem)
@@ -173,9 +172,9 @@ namespace RSfinalProject
         }
         #endregion
 
-        public List<KeyValuePair<string, double>> getProbability(List<string> givenItems, EvaluationEngine.Method method)
+        public List<KeyValuePair<string, double>> getProbability(List<string> givenItems, PredictionMethod method)
         {
-            if (method == EvaluationEngine.Method.Cp)
+            if (method == PredictionMethod.Cp)
             {
                 return getConditionalProbability(givenItems);
             }

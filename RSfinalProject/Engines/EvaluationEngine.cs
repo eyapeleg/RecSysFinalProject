@@ -4,17 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace RSfinalProject.Engines
+using System.IO;
+namespace RSfinalProject
 {
     public class EvaluationEngine
     {
         private List<string[]> testSet;
         private PredictionEngine predictionEngine;
-        public enum Method
-        {
-            Cp, Seq
-        }
+        private const string filePath = "results.csv";
 
         public EvaluationEngine(List<string[]> testSet, PredictionEngine predictionEngine)
         {
@@ -22,19 +19,20 @@ namespace RSfinalProject.Engines
             this.predictionEngine = predictionEngine;
         }
 
-        public void ComputeHitRatio()
+        public void ComputeHitRatio(int iterationNum, int cvNum)
         {
+            HashSet<EvaluationResult> evaluationResults = new HashSet<EvaluationResult>();
             Random rnd = new Random();
-            ConcurrentDictionary<int, ConcurrentDictionary<Method, double>> ans = new ConcurrentDictionary<int, ConcurrentDictionary<Method, double>>();
+            ConcurrentDictionary<int, ConcurrentDictionary<PredictionMethod, double>> ans = new ConcurrentDictionary<int, ConcurrentDictionary<PredictionMethod, double>>();
             double count = 0;
 
-            ans.TryAdd(1, new ConcurrentDictionary<Method, double>());
-            ans.TryAdd(5, new ConcurrentDictionary<Method, double>());
-            ans.TryAdd(10, new ConcurrentDictionary<Method, double>());
+            ans.TryAdd(1, new ConcurrentDictionary<PredictionMethod, double>());
+            ans.TryAdd(5, new ConcurrentDictionary<PredictionMethod, double>());
+            ans.TryAdd(10, new ConcurrentDictionary<PredictionMethod, double>());
             foreach (var len in ans.Keys)
             {
-                ans[len].TryAdd(Method.Cp, 0);
-                ans[len].TryAdd(Method.Seq, 0);
+                ans[len].TryAdd(PredictionMethod.Cp, 0);
+                ans[len].TryAdd(PredictionMethod.Seq, 0);
             }
 
             foreach (var session in testSet)
@@ -66,15 +64,17 @@ namespace RSfinalProject.Engines
                 count++;
             }
 
-            Console.WriteLine("\nHit Ratio Results:");
+            var stringBuilder = new StringBuilder();
             foreach (var len in ans.Keys)
             {
                 foreach (var method in ans[len].Keys)
                 {
-                    ans[len][method] = ans[len][method]/count;
-                    Console.WriteLine("Method: {0}, @Hit{1}: {2}", method, len, ans[len][method]);
+                    double result = ((double)ans[len][method]) / (double)count;
+                    var newLine = string.Format("{0},{1},{2},{3},{4}", iterationNum,cvNum,method,len,result);
+                    stringBuilder.AppendLine(newLine);
                 }
             }
+            File.AppendAllText(filePath, stringBuilder.ToString());
         }
     }
 }

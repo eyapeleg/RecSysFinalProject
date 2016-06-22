@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RSfinalProject.Engines;
 
 namespace RSfinalProject
 {
@@ -14,15 +13,15 @@ namespace RSfinalProject
         private DataLoaderEngine dataLoaderEngine;
         private PredictionEngine predictionEngine;
         private EvaluationEngine evaluationEngine;
-        private DataPreparationEngine dataPreparationEngine;
+        private DataUtils dataPreparationEngine;
 
-        private List<string[]> data;
-        private List<string[]> trainSet;
-        private List<string[]> testSet;
+        //private List<string[]> trainSet;
+        //private List<string[]> testSet;
+        //private List<string[]> data;
 
         public RecSys() {
             
-            dataPreparationEngine = new DataPreparationEngine();
+            dataPreparationEngine = new DataUtils();
         }
 
         public List<string[]> Load(string sFileName)
@@ -54,11 +53,11 @@ namespace RSfinalProject
             Console.WriteLine("Train Seq Model was completed successfully\nExection Time: " + elapsed.ToString("mm':'ss':'fff"));
         }
 
-        public void ComputeHitRatio()
+        public void ComputeHitRatio(int iterationNum, int cvNum)
         {
             Stopwatch timer = Stopwatch.StartNew();
 
-            evaluationEngine.ComputeHitRatio();
+            evaluationEngine.ComputeHitRatio(iterationNum, cvNum);
 
             timer.Stop();
             TimeSpan elapsed = timer.Elapsed;
@@ -67,10 +66,10 @@ namespace RSfinalProject
 
         public void runExperiment(string fileName, int numOfIterations, int numCrossValidation)
         {
-            this.Load(fileName);
+            List<string[]> data = this.Load(fileName);
             for(int i=0; i< numOfIterations;i++)
             {
-                List<string[]> allData = dataPreparationEngine.randomizeData(this.data);
+                List<string[]> allData = dataPreparationEngine.randomizeData(data);
                 for (int j = 0; j < numCrossValidation; j++)
                 {
                     Dictionary<DatasetType, List<string[]>> trainTestData = dataPreparationEngine.devideDataToTrainTestCV(allData,j,numCrossValidation);
@@ -78,7 +77,7 @@ namespace RSfinalProject
                     evaluationEngine = new EvaluationEngine(trainTestData[DatasetType.Test], predictionEngine);
                     TrainCpModel();
                     TrainSeqModel();
-                    ComputeHitRatio();
+                    ComputeHitRatio(i , j);
                 }
             }
         }
